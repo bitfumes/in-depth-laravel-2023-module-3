@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class UserTest extends TestCase
 {
     /**
-     * A basic test example.
+     * A basic unit test example.
      */
     public function test_instructor_name(): void
     {

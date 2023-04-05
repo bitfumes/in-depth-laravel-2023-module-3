@@ -4,7 +4,6 @@ namespace Tests\Feature\User;
 
 use App\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -15,7 +14,6 @@ class RegistrationTest extends TestCase
     public function setup() :void
     {
         parent::setup();
-        Artisan::call('migrate');
 
         $this->data = [
             'email'                 => 'abc@gmail.com',

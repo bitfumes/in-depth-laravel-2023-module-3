@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\User;
 
+use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -11,6 +12,7 @@ class RegistrationTest extends TestCase
      */
     public function test_after_successful_registration_user_exists_in_db(): void
     {
+        Artisan::call('migrate');
         // Arrange
         $data = [
             'email'                 => 'abc@gmail.com',
@@ -19,8 +21,10 @@ class RegistrationTest extends TestCase
             'name'                  => 'Sarthak',
         ];
         // Act
-        $this->post(route('user.register'), $data);
+        $response = $this->post('/api/user/register', $data);
+
         // Assert
+        $response->assertCreated();
         $this->assertDatabaseHas('users', [
             'email' => $data['email'],
             'name'  => $data['name'],

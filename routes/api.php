@@ -21,6 +21,11 @@ Route::post('/user/register', function (Request $request) {
 });
 
 Route::post('/user/login', function (Request $request) {
+    $request->validate([
+        'email'    => ['required' , 'email'],
+        'password' => ['required', 'min:8'],
+    ]);
+
     $user = User::where('email', $request->email)->first();
 
     if ($user && Hash::check($request->password, $user->password)) {

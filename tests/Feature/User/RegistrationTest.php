@@ -49,7 +49,7 @@ class RegistrationTest extends TestCase
         $this->assertTrue(Hash::check($this->data['password'], $user->password));
     }
 
-    public function test_while_registration_email_field_is_required()
+    public function test_while_registration_all_field_is_required()
     {
         // Arrange
         $this->withExceptionHandling();
@@ -62,5 +62,37 @@ class RegistrationTest extends TestCase
         $response->assertJsonValidationErrorFor('email');
         $response->assertJsonValidationErrorFor('name');
         $response->assertJsonValidationErrorFor('password');
+    }
+
+    public function test_while_registration_email_has_to_be_valid_email()
+    {
+        // Arrange
+        $this->withExceptionHandling();
+
+        // Act
+        $response = $this->postJson('/api/user/register', [
+            'email' => 'abc',
+        ]);
+
+        // Assert
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonValidationErrorFor('email');
+        $this->assertEquals($response->json('errors.email.0'), "The email field must be a valid email address.");
+    }
+
+    public function test_while_registration_password_must_be_confirmed()
+    {
+        // Arrange
+        $this->withExceptionHandling();
+
+        // Act
+        $response = $this->postJson('/api/user/register', [
+            'password' => 'password',
+        ]);
+
+        // Assert
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonValidationErrorFor('password');
+        $this->assertEquals($response->json('errors.password.0'), "The password field confirmation does not match.");
     }
 }

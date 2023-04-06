@@ -18,3 +18,13 @@ Route::post('/user/register', function (Request $request) {
     ]);
     return $user;
 });
+
+Route::post('/user/login', function (Request $request) {
+    $email = $request->email;
+    $user  = User::where('email', $email)->first();
+    if ($user) {
+        auth()->attempt(['email' => $email, 'password' => $request->password]);
+    }
+
+    return response(['message' => 'authenticated']);
+})->name('user.login');

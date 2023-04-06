@@ -29,7 +29,7 @@ class RegistrationTest extends TestCase
     public function test_after_successful_registration_user_exists_in_db(): void
     {
         // Act
-        $response = $this->postJson('/api/user/register', $this->data);
+        $response = $this->postJson(route('user.register'), $this->data);
 
         // Assert
         $response->assertCreated();
@@ -42,7 +42,7 @@ class RegistrationTest extends TestCase
     public function test_password_field_has_to_be_encrypted()
     {
         // Act
-        $this->postJson('/api/user/register', $this->data);
+        $this->postJson(route('user.register'), $this->data);
 
         // Assert
         $user = User::latest()->first();
@@ -55,7 +55,7 @@ class RegistrationTest extends TestCase
         $this->withExceptionHandling();
 
         // Act
-        $response = $this->postJson('/api/user/register', []);
+        $response = $this->postJson(route('user.register'), []);
 
         // Assert
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -70,7 +70,7 @@ class RegistrationTest extends TestCase
         $this->withExceptionHandling();
 
         // Act
-        $response = $this->postJson('/api/user/register', [
+        $response = $this->postJson(route('user.register'), [
             'email' => 'abc',
         ]);
 
@@ -86,7 +86,7 @@ class RegistrationTest extends TestCase
         $this->withExceptionHandling();
 
         // Act
-        $response = $this->postJson('/api/user/register', [
+        $response = $this->postJson(route('user.register'), [
             'password' => 'password',
         ]);
 

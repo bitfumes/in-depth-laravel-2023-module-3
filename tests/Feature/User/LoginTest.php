@@ -22,4 +22,22 @@ class LoginTest extends TestCase
         // Assert
         $this->assertArrayHasKey('token', $response->json());
     }
+
+    public function test_user_login_has_validation_for_email_and_password()
+    {
+        // Arrage
+        $this->withExceptionHandling();
+        $user = User::create([
+            'email'    => 'abc@gmail.com',
+            'password' => bcrypt('password'),
+            'name'     => 'Sarthak',
+        ]);
+
+        // Act
+        $response = $this->postJson(route('user.login'), []);
+
+        // Assert
+        $response->assertJsonValidationErrorFor('password');
+        $response->assertJsonValidationErrorFor('email');
+    }
 }

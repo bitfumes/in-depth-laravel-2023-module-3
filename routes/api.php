@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/user/register', function (Request $request) {
@@ -20,11 +21,14 @@ Route::post('/user/register', function (Request $request) {
 });
 
 Route::post('/user/login', function (Request $request) {
-    $email = $request->email;
-    $user  = User::where('email', $email)->first();
-    if ($user) {
-        auth()->attempt(['email' => $email, 'password' => $request->password]);
+    $user = User::where('email', $request->email)->first();
+
+    if ($user && Hash::check($request->password, $user->password)) {
+        $token = $user->createToken('token');
+        return response(['token' => $token->plainTextToken]);
     }
 
-    return response(['message' => 'authenticated']);
+    return response(['errors' => [
+        'email' => ['The provided credentials are incorrect.'],
+    ]]);
 })->name('user.login');

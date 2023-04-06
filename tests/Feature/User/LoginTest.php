@@ -17,10 +17,9 @@ class LoginTest extends TestCase
         ]);
 
         // Act
-        $this->postJson(route('user.login'), ['email' => $user->email, 'password' => 'password']);
+        $response = $this->postJson(route('user.login'), ['email' => $user->email, 'password' => 'password']);
 
         // Assert
-        $this->assertTrue(auth()->check());
-        $this->assertAuthenticated();
+        $this->assertArrayHasKey('token', $response->json());
     }
 }

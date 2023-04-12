@@ -10,7 +10,7 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
     use LazilyRefreshDatabase;
 
-    public function setup(): void
+    protected function setup(): void
     {
         parent::setUp();
         $this->withoutExceptionHandling();

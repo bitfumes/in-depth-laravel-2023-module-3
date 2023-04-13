@@ -10,7 +10,7 @@ class Subscriber extends Model
 {
     use HasFactory;
 
-    public function emaillist() : BelongsTo
+    public function list() : BelongsTo
     {
         return $this->belongsTo(EmailList::class);
     }

@@ -10,6 +10,10 @@ class Subscriber extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'meta' => 'array',
+    ];
+
     public function list() : BelongsTo
     {
         return $this->belongsTo(EmailList::class);

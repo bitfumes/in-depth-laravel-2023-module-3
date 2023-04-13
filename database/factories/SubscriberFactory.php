@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\EmailList;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,13 @@ class SubscriberFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'list_id'         => EmailList::factory(),
+            'email'           => $this->faker->email,
+            'name'            => $this->faker->name,
+            'status'          => $this->faker->boolean,
+            'meta'            => [],
+            'confirmed_at'    => $this->faker->dateTime,
+            'unsubscribed_at' => $this->faker->dateTime,
         ];
     }
 }

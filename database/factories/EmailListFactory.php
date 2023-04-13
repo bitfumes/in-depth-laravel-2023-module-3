@@ -18,7 +18,9 @@ class EmailListFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'name'        => $this->faker->name,
+            'description' => $this->faker->text,
+            'user_id'     => User::factory(),
         ];
     }
 }

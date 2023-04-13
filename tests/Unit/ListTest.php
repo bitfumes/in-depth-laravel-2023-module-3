@@ -4,7 +4,7 @@ use App\Models\EmailList;
 use App\Models\User;
 
 test('list belongs to a user', function () {
-    User::factory()->create();
+    $user = User::factory()->create();
     $list = EmailList::factory()->create();
 
     $this->assertInstanceOf(User::class, $list->user());
@@ -12,7 +12,7 @@ test('list belongs to a user', function () {
 
 test('when user is deleted then email list of that user also deleted', function () {
     $user = User::factory()->create();
-    $list = EmailList::factory()->create(['user_id' => $user->id]);
+    $list = EmailList::factory()->for($user)->create();
 
     $user->delete();
 

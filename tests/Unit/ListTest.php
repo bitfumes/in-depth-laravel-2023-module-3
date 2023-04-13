@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Campaign;
 use App\Models\EmailList;
+use App\Models\Subscriber;
 use App\Models\User;
 
 test('list belongs to a user', function () {
@@ -29,4 +31,14 @@ test("email list has a field called name and description", function () {
         'name'        => $list->name,
         'description' => $list->description,
     ]);
+});
+
+it('has many campaigns', function () {
+    $list = EmailList::factory()->has(Campaign::factory(), 'campaigns')->create();
+    expect($list->campaigns->first())->toBeInstanceOf(Campaign::class);
+});
+
+it('has many subscribers', function () {
+    $list = EmailList::factory()->has(Subscriber::factory(), 'subscribers')->create();
+    expect($list->subscribers->first())->toBeInstanceOf(Subscriber::class);
 });

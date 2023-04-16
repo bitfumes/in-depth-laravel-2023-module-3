@@ -18,10 +18,12 @@ class CampaignSendController extends Controller
         $list        = $campaign->list;
         $subscribers = $list->subscribers;
 
-        $subscribers->each(
-            fn ($subscriber) => Mail::to($subscriber->email)
-                ->queue(new CampaignMail($campaign))
-        );
+        if (is_null($campaign->scheduled_at)) {
+            $subscribers->each(
+                fn ($subscriber) => Mail::to($subscriber->email)
+                    ->queue(new CampaignMail($campaign))
+            );
+        }
 
         return response()->json([
             'message' => 'Email sent successfully',

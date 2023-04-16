@@ -70,3 +70,26 @@ test("user can list all the campaigns", function () {
     $response->assertOk();
     $response->assertJsonCount(2, 'data');
 });
+
+test('campaign can be scheduled', function () {
+    $user = User::factory()->create();
+    $list = EmailList::factory()->create();
+    Sanctum::actingAs($user);
+
+    // Arrange
+    $hourLater = now()->addHour();
+    $data      = [
+        'name'         => 'Test Campaign',
+        'subject'      => 'Test Subject',
+        'content'      => 'Hi this is my first test email',
+        'from_name'    => 'Sarthak',
+        'from_email'   => 'abcd@gmail.com',
+        'list_id'      => $list->id,
+        'scheduled_at' => $hourLater,
+    ];
+
+    // Act
+    $response = $this->postJson(route('campaign.store'), $data);
+    $campaign = $response->json();
+    $this->assertTrue($hourLater->eq($campaign['scheduled_at']));
+});

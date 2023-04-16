@@ -22,12 +22,13 @@ class CampaignStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'       => 'required',
-            'subject'    => 'required',
-            'content'    => 'required',
-            'from_name'  => 'required',
-            'from_email' => ['required', 'email'],
-            'list_id'    => ['required', 'exists:email_lists,id'],
+            'name'         => 'required',
+            'subject'      => 'required',
+            'content'      => 'required',
+            'from_name'    => 'required',
+            'from_email'   => ['required', 'email'],
+            'list_id'      => ['required', 'exists:email_lists,id'],
+            'scheduled_at' => 'nullable|date',
         ];
     }
 }

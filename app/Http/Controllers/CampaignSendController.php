@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CampaignMail;
 use App\Models\Campaign;
+use Illuminate\Support\Facades\Mail;
 
 class CampaignSendController extends Controller
 {
@@ -15,7 +17,11 @@ class CampaignSendController extends Controller
 
         $list        = $campaign->list;
         $subscribers = $list->subscribers;
-        dd($subscribers->count());
+
+        $subscribers->each(
+            fn ($subscriber) => Mail::to($subscriber->email)
+                ->send(new CampaignMail($campaign))
+        );
 
         return response()->json([
             'message' => 'Email sent successfully',

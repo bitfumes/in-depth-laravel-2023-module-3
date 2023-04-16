@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -33,6 +34,7 @@ class CampaignFactory extends Factory
             'from_name'        => $this->faker->name,
             'from_email'       => $this->faker->email,
             'type'             => $this->faker->name,
+            'user_id'          => User::factory(),
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Campaign;
+use App\Models\CampaignEmail;
 use App\Models\EmailList;
 
 test('campaign belongs to a list', function () {
@@ -29,4 +30,14 @@ test('campaign has many fields', function () {
     $this->assertArrayHasKey('from_name', $campaign);
     $this->assertArrayHasKey('from_email', $campaign);
     $this->assertArrayHasKey('type', $campaign);
+});
+
+test("campaign can have many campaignemails", function () {
+    $campaign = Campaign::factory()->create();
+
+    CampaignEmail::factory()->create([
+        'campaign_id' => $campaign->id,
+    ]);
+
+    $this->assertInstanceOf(CampaignEmail::class, $campaign->emails->first());
 });

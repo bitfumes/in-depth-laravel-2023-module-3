@@ -10,6 +10,8 @@ class CampaignEmail extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function campaign(): BelongsTo
     {
         return $this->belongsTo(Campaign::class);

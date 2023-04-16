@@ -34,4 +34,14 @@ class SubscriberController extends Controller
         $subscriber->update(['confirmed_at' => now()]);
         return response('Subscription confirmed');
     }
+
+    public function unsubscribe(Subscriber $subscriber)
+    {
+        if (! request()->hasValidSignature()) {
+            abort(401);
+        }
+
+        $subscriber->update(['unsubscribed_at' => now()]);
+        return response('Unsubscribed');
+    }
 }

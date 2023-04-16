@@ -44,3 +44,26 @@ test("user can confirm their subscription by using this link on email", function
 
     $this->assertNotNull($subscriber->fresh()->confirmed_at);
 });
+
+test('subscriber can unsubscribe from a list', function () {
+    // Arrange
+    $list = EmailList::factory()->create();
+    Notification::fake();
+    $this->postJson(route('subscriber.store', [
+        'email'           => 'abc@gmai.com',
+        'list_id'         => $list->id,
+        'confirmed_at'    => now(),
+        'unsubscribed_at' => null,
+    ]));
+
+    $subscriber = Subscriber::first();
+
+    // Act
+    $url = URL::signedRoute('subscriber.unsubscribe', ['subscriber' => $subscriber->email]);
+
+    $this->getJson($url)
+        ->assertOk()
+        ->assertSee('Unsubscribed');
+
+    $this->assertNotNull($subscriber->fresh()->unsubscribed_at);
+});

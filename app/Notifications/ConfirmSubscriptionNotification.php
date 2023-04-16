@@ -6,6 +6,7 @@ use App\Models\EmailList;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\URL;
 
 class ConfirmSubscriptionNotification extends Notification
 {
@@ -35,7 +36,7 @@ class ConfirmSubscriptionNotification extends Notification
     {
         return (new MailMessage())
             ->line("Thank you for subscribing to {$this->list->name}.")
-            ->action('Confirm Subscription', url('/'))
+            ->action('Confirm Subscription', url($this->url($notifiable)))
             ->line('Thank you for using our application!');
     }
 
@@ -49,5 +50,10 @@ class ConfirmSubscriptionNotification extends Notification
         return [
             //
         ];
+    }
+
+    protected function url($notifiable)
+    {
+        return URL::signedRoute('subscriber.confirm', ['subscriber' => $notifiable->routes['mail']]);
     }
 }

@@ -10,6 +10,7 @@ Route::post('/user/login', [AuthController::class, 'login'])->name('user.login')
 
 // Subscriber
 Route::post('/subscriber', [SubscriberController::class, 'store'])->name('subscriber.store');
+Route::get('/subscriber/{subscriber:email}', [SubscriberController::class, 'confirm'])->name('subscriber.confirm');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/email-list', [EmailListController::class, 'store'])->name('email-lists.store');

@@ -14,7 +14,7 @@ class SubscriberController extends Controller
     {
         $request->validate([
             'email'   => 'required|email',
-            'name'    => 'required',
+            'name'    => 'sometimes',
             'list_id' => 'required|exists:email_lists,id',
         ]);
 
@@ -23,5 +23,15 @@ class SubscriberController extends Controller
         $list = EmailList::find($request->list_id);
         Notification::route('mail', $request->email)
             ->notify(new ConfirmSubscriptionNotification($list));
+    }
+
+    public function confirm(Subscriber $subscriber)
+    {
+        if (! request()->hasValidSignature()) {
+            abort(401);
+        }
+
+        $subscriber->update(['confirmed_at' => now()]);
+        return response('Subscription confirmed');
     }
 }

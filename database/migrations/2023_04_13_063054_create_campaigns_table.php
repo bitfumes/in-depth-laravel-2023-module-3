@@ -28,6 +28,7 @@ return new class() extends Migration {
             $table->string('from_email');
             $table->string('type')->nullable();
             $table->foreignId('list_id')->constrained('email_lists')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

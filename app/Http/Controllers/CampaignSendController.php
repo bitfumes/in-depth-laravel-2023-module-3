@@ -20,7 +20,7 @@ class CampaignSendController extends Controller
 
         $subscribers->each(
             fn ($subscriber) => Mail::to($subscriber->email)
-                ->send(new CampaignMail($campaign))
+                ->queue(new CampaignMail($campaign))
         );
 
         return response()->json([

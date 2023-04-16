@@ -23,7 +23,7 @@ test("user can send newsletter email to campaign list subscribers", function () 
 
     // Assert
     $response->assertStatus(200);
-    Mail::assertSent(CampaignMail::class, 5);
+    Mail::assertQueued(CampaignMail::class, 5);
     $this->assertdatabaseHas('campaign_emails', [
         'campaign_id' => $campaign->id,
         'subject'     => $campaign->subject,

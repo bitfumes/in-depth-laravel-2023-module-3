@@ -16,7 +16,10 @@ test("user can send newsletter email to campaign list subscribers", function () 
 
     $list        = EmailList::factory()->create();
     $subscribers = Subscriber::factory()->count(5)->for($list, 'list')->create();
-    $campaign    = Campaign::factory()->create(['list_id' => $list->id]);
+    $campaign    = Campaign::factory()->create([
+        'list_id'      => $list->id,
+        'scheduled_at' => null,
+    ]);
 
     // Act
     $response = $this->postJson(route('campaign.send', $campaign->id));

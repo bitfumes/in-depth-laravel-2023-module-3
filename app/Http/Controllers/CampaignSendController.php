@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\CampaignMail;
 use App\Models\Campaign;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Artisan;
 
 class CampaignSendController extends Controller
 {
@@ -15,14 +14,8 @@ class CampaignSendController extends Controller
             'content' => $campaign->content,
         ]);
 
-        $list        = $campaign->list;
-        $subscribers = $list->subscribers;
-
         if (is_null($campaign->scheduled_at)) {
-            $subscribers->each(
-                fn ($subscriber) => Mail::to($subscriber->email)
-                    ->queue(new CampaignMail($campaign))
-            );
+            Artisan::call("campaign:send {$campaign->id}");
         }
 
         return response()->json([

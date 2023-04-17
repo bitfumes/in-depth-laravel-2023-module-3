@@ -14,11 +14,17 @@ test("user can send newsletter email to campaign list subscribers", function () 
     Sanctum::actingAs($user);
     Mail::fake();
 
-    $list        = EmailList::factory()->create();
-    $subscribers = Subscriber::factory()->count(5)->for($list, 'list')->create();
-    $campaign    = Campaign::factory()->create([
+    $list = EmailList::factory()->create();
+    Subscriber::factory()->for($list, 'list')->create([
+        'email' => 'sarthak+test1@bitfumes.com',
+    ]);
+    Subscriber::factory()->for($list, 'list')->create([
+        'email' => 'sarthak+test2@bitfumes.com',
+    ]);
+    $campaign = Campaign::factory()->create([
         'list_id'      => $list->id,
         'scheduled_at' => null,
+        'from_email'   => 'sarthak@bitfumes.com',
     ]);
 
     // Act
@@ -26,7 +32,7 @@ test("user can send newsletter email to campaign list subscribers", function () 
 
     // Assert
     $response->assertStatus(200);
-    Mail::assertQueued(CampaignMail::class, 5);
+    Mail::assertQueued(CampaignMail::class, 2);
     $this->assertdatabaseHas('campaign_emails', [
         'campaign_id' => $campaign->id,
         'subject'     => $campaign->subject,

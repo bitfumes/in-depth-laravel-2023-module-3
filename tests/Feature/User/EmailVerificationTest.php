@@ -32,6 +32,6 @@ test("user can click on verify email link and email will be verified", function 
     $response = $this->get($url);
 
     // Assert
-    $response->assertOk();
+    $response->assertRedirect();
     $this->assertNotNull($user->fresh()->email_verified_at);
 });

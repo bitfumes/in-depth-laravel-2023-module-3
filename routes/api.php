@@ -7,7 +7,7 @@ use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/auth/register', [AuthController::class, 'register'])->name('user.register');
+Route::post('/user/register', [AuthController::class, 'register'])->name('user.register');
 Route::post('/user/login', [AuthController::class, 'login'])->name('user.login');
 Route::get('/user/email/{email}/verify', [AuthController::class, 'verify'])->name('user.verify');
 
@@ -21,6 +21,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/email-list', [EmailListController::class, 'index'])->name('email-lists.index');
     Route::put('/email-list/{list}', [EmailListController::class, 'update'])->name('email-lists.update');
     Route::delete('/email-list/{list}', [EmailListController::class, 'destroy'])->name('email-lists.destroy');
+
+    // Logout
+    Route::post('/user/logout', [AuthController::class, 'logout'])->name('user.logout');
 
     // campaigns
     Route::apiResource('campaign', CampaignController::class);

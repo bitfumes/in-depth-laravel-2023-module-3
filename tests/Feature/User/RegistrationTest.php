@@ -5,6 +5,7 @@ namespace Tests\Feature\User;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -14,6 +15,7 @@ class RegistrationTest extends TestCase
     public function setup() :void
     {
         parent::setup();
+        Notification::fake();
 
         $this->data = [
             'email'                 => 'abc@gmail.com',

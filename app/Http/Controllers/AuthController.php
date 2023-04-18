@@ -50,4 +50,10 @@ class AuthController extends Controller
         $user->save();
         return redirect('http://localhost:3000/login?verified=true');
     }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+        return response(['message' => 'Logged out successfully.']);
+    }
 }

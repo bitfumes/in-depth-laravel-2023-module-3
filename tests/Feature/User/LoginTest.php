@@ -3,6 +3,7 @@
 namespace Tests\Feature\User;
 
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
@@ -39,5 +40,22 @@ class LoginTest extends TestCase
         // Assert
         $response->assertJsonValidationErrorFor('password');
         $response->assertJsonValidationErrorFor('email');
+    }
+
+    public function test_user_token_will_be_removed_on_logout()
+    {
+        $user = User::factory()->create();
+
+        $this->postJson(route('user.login'), ['email' => $user->email, 'password' => 'password']);
+
+        $this->assertDatabasehas('personal_access_tokens', [
+            'tokenable_id' => $user->id,
+        ]);
+
+        Sanctum::actingAs($user);
+        $this->postJson(route('user.logout'));
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'tokenable_id' => $user->id,
+        ]);
     }
 }

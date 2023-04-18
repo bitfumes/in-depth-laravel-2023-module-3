@@ -34,4 +34,20 @@ class AuthController extends Controller
             'email' => ['The provided credentials are incorrect.'],
         ]]);
     }
+
+    public function verify($email)
+    {
+        if (! request()->hasValidSignature()) {
+            abort(401);
+        }
+
+        $user = User::where('email', $email)->first();
+        if (! $user) {
+            return response('Not able to verify email.', 404);
+        }
+
+        $user->email_verified_at = now();
+        $user->save();
+        return redirect('http://localhost:3000/login?verified=true');
+    }
 }

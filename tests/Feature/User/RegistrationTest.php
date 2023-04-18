@@ -80,6 +80,26 @@ class RegistrationTest extends TestCase
         $this->assertEquals($response->json('errors.email.0'), "The email field must be a valid email address.");
     }
 
+    public function test_while_registration_email_has_to_be_unqiue()
+    {
+        User::factory()->create(['email' => 'abc@bitfumes.com']);
+        // Arrange
+        $this->withExceptionHandling();
+
+        // Act
+        $response = $this->postJson(route('user.register'), [
+            'name'                  => 'sarthak',
+            'password'              => 'password',
+            'password_confirmation' => 'password',
+            'email'                 => 'abc@bitfumes.com',
+        ]);
+
+        // Assert
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonValidationErrorFor('email');
+        $this->assertEquals($response->json('errors.email.0'), "The email has already been taken.");
+    }
+
     public function test_while_registration_password_must_be_confirmed()
     {
         // Arrange

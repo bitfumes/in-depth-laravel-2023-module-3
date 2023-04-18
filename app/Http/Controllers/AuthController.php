@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -16,6 +17,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),
             'name'     => $request->name,
         ]);
+        $user->notify(new VerifyEmailNotification());
         return $user;
     }
 

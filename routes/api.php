@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/register', [AuthController::class, 'register'])->name('user.register');
 Route::post('/user/login', [AuthController::class, 'login'])->name('user.login');
+Route::get('/user/email/{email}/verify', [AuthController::class, 'verify'])->name('user.verify');
 
 // Subscriber
 Route::post('/subscriber', [SubscriberController::class, 'store'])->name('subscriber.store');

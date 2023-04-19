@@ -16,6 +16,8 @@ class LoginTest extends TestCase
             'password' => bcrypt('password'),
             'name'     => 'Sarthak',
         ]);
+        $user->email_verified_at = now();
+        $user->save();
 
         // Act
         $response = $this->postJson(route('user.login'), ['email' => $user->email, 'password' => 'password']);
@@ -57,5 +59,18 @@ class LoginTest extends TestCase
         $this->assertDatabaseMissing('personal_access_tokens', [
             'tokenable_id' => $user->id,
         ]);
+    }
+
+    public function test_user_will_not_able_to_login_if_not_verified_email()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+
+        $response = $this->postJson(route('user.login'), [
+            'email' => $user->email, 'password' => 'password',
+        ]);
+
+        $response->assertStatus(401);
     }
 }

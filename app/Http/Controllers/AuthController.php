@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use App\Notifications\VerifyEmailNotification;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -23,7 +24,9 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)
+            ->whereNotNull('email_verified_at')
+            ->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
             $token = $user->createToken('token');
@@ -32,7 +35,7 @@ class AuthController extends Controller
 
         return response(['errors' => [
             'email' => ['The provided credentials are incorrect.'],
-        ]]);
+        ]], Response::HTTP_UNAUTHORIZED);
     }
 
     public function verify($email)

@@ -18,24 +18,25 @@ class EmailListController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name'        => 'required',
+            'description' => 'sometimes',
         ]);
 
         return EmailList::create([
-            'name'    => $request->name,
-            'user_id' => auth()->id(),
+            'name'        => $request->name,
+            'description' => $request->description,
+            'user_id'     => auth()->id(),
         ]);
     }
 
     public function update(Request $request, EmailList $list)
     {
         $request->validate([
-            'name' => 'required',
+            'name'        => 'required',
+            'description' => 'sometimes',
         ]);
 
-        $list->update([
-            'name' => $request->name,
-        ]);
+        $list->update($request->only('name', 'description'));
 
         return response($list);
     }
@@ -44,5 +45,11 @@ class EmailListController extends Controller
     {
         $list->delete();
         return response(null);
+    }
+
+    public function show($list)
+    {
+        $list = EmailList::where('user_id', auth()->id())->findOrFail($list);
+        return response($list);
     }
 }

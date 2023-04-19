@@ -19,6 +19,7 @@ Route::get('/subscriber/{subscriber:email}/unsubscribe', [SubscriberController::
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/email-list', [EmailListController::class, 'store'])->name('email-lists.store');
     Route::get('/email-list', [EmailListController::class, 'index'])->name('email-lists.index');
+    Route::get('/email-list/{list}', [EmailListController::class, 'show'])->name('email-lists.show');
     Route::put('/email-list/{list}', [EmailListController::class, 'update'])->name('email-lists.update');
     Route::delete('/email-list/{list}', [EmailListController::class, 'destroy'])->name('email-lists.destroy');
 

@@ -102,3 +102,17 @@ test("user can delete a list", function () {
         'id' => $emailList->id,
     ]);
 });
+
+test('user can get single email list that user has created', function () {
+    // Arrage
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
+    $list = EmailList::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    // Act
+    $response = $this->getJson(route('email-lists.show', $list->id));
+    // Assert
+    $response->assertOk();
+});

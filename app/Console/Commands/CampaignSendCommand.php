@@ -31,7 +31,7 @@ class CampaignSendCommand extends Command
         if ($this->argument('campaign')) {
             $campaigns = Campaign::where('id', $this->argument('campaign'))->get();
         } else {
-            $campaigns = Campaign::where('status', 1)->whereNotNull('scheduled_at')->get();
+            $campaigns = Campaign::where('status', 0)->whereNotNull('scheduled_at')->get();
         }
 
         $campaigns->each(
@@ -43,6 +43,9 @@ class CampaignSendCommand extends Command
                     fn ($subscriber) => Mail::to($subscriber->email)
                         ->queue(new CampaignMail($campaign))
                 );
+
+                $campaign->status = 1;
+                $campaign->save();
             }
         );
     }

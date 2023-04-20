@@ -22,4 +22,9 @@ class Campaign extends Model
     {
         return $this->hasMany(CampaignEmail::class);
     }
+
+    public function getListNameAttribute()
+    {
+        return $this->list->name;
+    }
 }

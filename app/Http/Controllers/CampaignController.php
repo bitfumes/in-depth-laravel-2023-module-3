@@ -11,6 +11,7 @@ class CampaignController extends Controller
     public function index()
     {
         $campaigns = auth()->user()->campaigns;
+        $campaigns->append('listName');
 
         return response(['data' => $campaigns]);
     }

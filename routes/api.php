@@ -12,7 +12,7 @@ Route::post('/user/login', [AuthController::class, 'login'])->name('user.login')
 Route::get('/user/email/{email}/verify', [AuthController::class, 'verify'])->name('user.verify');
 
 // Subscriber
-Route::post('/subscriber', [SubscriberController::class, 'store'])->name('subscriber.store');
+Route::post('/list/{list}/subscriber', [SubscriberController::class, 'store'])->name('subscriber.store');
 Route::get('/subscriber/{subscriber:email}', [SubscriberController::class, 'confirm'])->name('subscriber.confirm');
 Route::get('/subscriber/{subscriber:email}/unsubscribe', [SubscriberController::class, 'unsubscribe'])->name('subscriber.unsubscribe');
 

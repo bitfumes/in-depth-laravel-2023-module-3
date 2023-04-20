@@ -10,6 +10,7 @@ class EmailListController extends Controller
     public function index()
     {
         $lists = EmailList::where('user_id', auth()->id())->get();
+        $lists->append('subscribeLink');
         return response([
             'data' => $lists,
         ]);

@@ -10,17 +10,15 @@ use Illuminate\Support\Facades\Notification;
 
 class SubscriberController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, EmailList $list)
     {
         $request->validate([
-            'email'   => 'required|email',
-            'name'    => 'sometimes',
-            'list_id' => 'required|exists:email_lists,id',
+            'email' => 'required|email',
+            'name'  => 'sometimes',
         ]);
 
-        Subscriber::create($request->only('email', 'name', 'list_id'));
+        Subscriber::create([...$request->only('email', 'name'), 'list_id' => $list->id]);
 
-        $list = EmailList::find($request->list_id);
         Notification::route('mail', $request->email)
             ->notify(new ConfirmSubscriptionNotification($list));
     }

@@ -28,10 +28,9 @@ test("user can confirm their subscription by using this link on email", function
     $list = EmailList::factory()->create();
     Notification::fake();
 
-    $this->postJson(route('subscriber.store', [
-        'email'   => 'abc@gmail.com',
-        'list_id' => $list->id,
-    ]));
+    $this->postJson(route('subscriber.store', $list->id), [
+        'email' => 'abc@gmail.com',
+    ]);
 
     $subscriber = Subscriber::first();
 
@@ -48,12 +47,11 @@ test('subscriber can unsubscribe from a list', function () {
     // Arrange
     $list = EmailList::factory()->create();
     Notification::fake();
-    $this->postJson(route('subscriber.store', [
+    $this->postJson(route('subscriber.store', $list->id), [
         'email'           => 'abc@gmai.com',
-        'list_id'         => $list->id,
         'confirmed_at'    => now(),
         'unsubscribed_at' => null,
-    ]));
+    ]);
 
     $subscriber = Subscriber::first();
 

@@ -51,6 +51,9 @@ class EmailListController extends Controller
     public function show($list)
     {
         $list = EmailList::where('user_id', auth()->id())->findOrFail($list);
-        return response($list);
+        return response([
+            'list'        => $list,
+            'subscribers' => $list->subscribers,
+        ]);
     }
 }

@@ -27,10 +27,11 @@ jobs:
         run: vendor/bin/pest
 
   deploy:
+    needs: laravel-tests
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Pro
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "https://api-data.mezohub.com/webhook/project/V65xYRdGvybDzOWg/deploy?token=${{ secrets.MWZOHUB_TOKEN }}"
+          url: "https://api-data.mezohub.com/webhook/project/V65xYRdGvybDzOWg/deploy?token=${{ secrets.MEZOHUB_TOKEN }}"
           method: "POST"

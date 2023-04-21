@@ -30,6 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy Pro
+        if: github.ref == 'refs/heads/main'
         uses: fjogeleit/http-request-action@v1
         with:
           url: "https://api-data.mezohub.com/webhook/project/V65xYRdGvybDzOWg/deploy?token=${{ secrets.MEZO_TOKEN }}"
